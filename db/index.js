@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 const pool = new Pool({
+  // TODO: move this to env
   user: "postgres",
   host: "localhost",
   database: "dvdrental",

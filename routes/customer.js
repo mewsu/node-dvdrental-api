@@ -1,14 +1,9 @@
 const Router = require("express-promise-router");
-
 const db = require("../db");
-
 const bodyParser = require("body-parser");
 
 // create application/json parser
-var jsonParser = bodyParser.json();
-
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+const jsonParser = bodyParser.json();
 
 // create a new express-promise-router
 // this has the same API as the normal express router except
