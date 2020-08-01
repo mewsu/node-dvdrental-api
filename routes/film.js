@@ -1,6 +1,7 @@
 const Router = require("express-promise-router");
 const db = require("../db");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // need to disable this outside localhost
 const { query } = require("express");
 
 // create application/json parser
@@ -42,7 +43,7 @@ const appendWhereClause = (cw, add) => {
 // Get films
 // Should be able to query by:
 // actor_id, title, release_year, rental_rate max, length min, rating min, language_id
-router.get("/", async (req, res) => {
+router.get("/", cors(), async (req, res) => {
   console.log(req.query);
   // create a query param -> query string object map with array idx
   let qstring = "SELECT * FROM film ";
@@ -57,8 +58,8 @@ router.get("/", async (req, res) => {
     const paramIdx = idx + 1;
     if (qname == "page") {
       // page clause
-      qval = 10 * (qval - 1);
-      pc += ` ORDER BY film.film_id OFFSET $${paramIdx} LIMIT 10 `;
+      qval = 8 * (qval - 1);
+      pc += ` ORDER BY film.film_id OFFSET $${paramIdx} LIMIT 8 `;
     } else {
       // where clause
       let add;
