@@ -2,10 +2,6 @@ const Router = require("express-promise-router");
 const db = require("../db");
 const bodyParser = require("body-parser");
 const cors = require("cors"); // need to disable this outside localhost
-const { query } = require("express");
-
-// create application/json parser
-const jsonParser = bodyParser.json();
 
 // create a new express-promise-router
 // this has the same API as the normal express router except
@@ -14,12 +10,40 @@ const router = new Router();
 // export our router to be mounted by the parent application
 module.exports = router;
 
+const rowsPerPage = 8; // TODO: move to env?
+
+// Get total pages of films
+router.get("/pages", cors(), async (req, res) => {
+  console.log("get pages");
+  try {
+    const rows = await db.query("SELECT COUNT(*) FROM film");
+    res.send(String(Math.ceil(rows[0].count / rowsPerPage)));
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(400);
+  }
+});
+
+// Films search by title
+router.get("/search", cors(), async (req, res) => {
+  console.log(req.query);
+  const contains = req.query.title;
+  try {
+    const rows = await db.query("SELECT * FROM film WHERE title LIKE $1", [
+      `%${contains}%`
+    ]);
+    res.send(rows);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(400);
+  }
+});
+
 // Get film by id
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const rows = await db.query("SELECT * FROM film WHERE film_id = $1", [id]);
-
     res.send(rows[0]);
   } catch (err) {
     console.log(err);
@@ -58,7 +82,7 @@ router.get("/", cors(), async (req, res) => {
     const paramIdx = idx + 1;
     if (qname == "page") {
       // page clause
-      qval = 8 * (qval - 1);
+      qval = rowsPerPage * (qval - 1); // this is offset
       pc += ` ORDER BY film.film_id OFFSET $${paramIdx} LIMIT 8 `;
     } else {
       // where clause
@@ -83,7 +107,6 @@ router.get("/", cors(), async (req, res) => {
       wc = appendWhereClause(wc, add); // wc is WHERE ... AND ... AND ...
     }
 
-    // push param val
     params.push(qval);
   });
 
