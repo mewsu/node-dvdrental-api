@@ -2,6 +2,9 @@ const Router = require("express-promise-router");
 const db = require("../db");
 const bodyParser = require("body-parser");
 
+const session = require("express-session");
+const passport = require("passport");
+
 // create application/json parser
 const jsonParser = bodyParser.json();
 
@@ -12,8 +15,9 @@ const router = new Router();
 // export our router to be mounted by the parent application
 module.exports = router;
 
+// TODO: auth these routes to logged in user or staff
 // Get customer by id
-router.get("/:id", async (req, res) => {
+router.get("/:id", passport.authenticate("session"), async (req, res) => {
   const { id } = req.params;
   try {
     const rows = await db.query(

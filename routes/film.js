@@ -29,9 +29,10 @@ router.get("/search", cors(), async (req, res) => {
   console.log(req.query);
   const contains = req.query.title;
   try {
-    const rows = await db.query("SELECT * FROM film WHERE title LIKE $1", [
-      `%${contains}%`
-    ]);
+    const rows = await db.query(
+      "SELECT * FROM film WHERE title ILIKE $1 LIMIT 8",
+      [`%${contains}%`]
+    );
     res.send(rows);
   } catch (err) {
     console.log(err);
