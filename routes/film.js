@@ -3,14 +3,10 @@ const db = require("../db");
 const bodyParser = require("body-parser");
 const cors = require("cors"); // need to disable this outside localhost
 
-// create a new express-promise-router
-// this has the same API as the normal express router except
-// it allows you to use async functions as route handlers
 const router = new Router();
-// export our router to be mounted by the parent application
 module.exports = router;
 
-const rowsPerPage = 8; // TODO: move to env?
+const rowsPerPage = 8; // TODO: move to env
 
 // Get total pages of films
 router.get("/pages", cors(), async (req, res) => {

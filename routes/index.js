@@ -5,7 +5,7 @@ const customer = require("./customer");
 const film = require("./film");
 const auth = require("./auth");
 
-// Middlewares
+// Shared middlewares
 const ensureUserLoggedIn = (req, res, next) => {
   req.user ? next() : res.redirect("/login");
 };

@@ -1,23 +1,14 @@
 const Router = require("express-promise-router");
 const db = require("../db");
 const bodyParser = require("body-parser");
-
-const session = require("express-session");
-const passport = require("passport");
-
-// create application/json parser
 const jsonParser = bodyParser.json();
 
-// create a new express-promise-router
-// this has the same API as the normal express router except
-// it allows you to use async functions as route handlers
 const router = new Router();
-// export our router to be mounted by the parent application
 module.exports = router;
 
-// TODO: auth these routes to logged in user or staff
+// Auth will be done on main router level
 // Get customer by id
-router.get("/:id", passport.authenticate("session"), async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const rows = await db.query(
