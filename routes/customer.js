@@ -65,3 +65,7 @@ router.post("/:id", jsonParser, async (req, res) => {
     res.sendStatus(400);
   }
 });
+
+router.get("/", (req, res) => {
+  res.send("this is the customer page");
+});

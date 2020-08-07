@@ -15,7 +15,11 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
-  bodyParser.urlencoded({ extended: false }),
+  bodyParser.urlencoded({ extended: false }), // passport reads the fields email & password
+  (req, res, next) => {
+    console.log(JSON.stringify(req.body));
+    next();
+  },
   passport.authenticate("local", { successRedirect: "/" })
 );
 
