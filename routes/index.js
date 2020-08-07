@@ -1,5 +1,5 @@
 const session = require("express-session");
-
+const cors = require("cors");
 // ./routes/index.js
 const customer = require("./customer");
 const film = require("./film");
@@ -34,6 +34,7 @@ const ensureUserIsStaff = (req, res, next) => {
 };
 
 module.exports = app => {
+  app.use(cors());
   app.use(session({ secret: "cats" }));
   app.use(auth); // auth has passport setup, GET/POST login and GET logout
   app.use("/customer", ensureUserLoggedIn, ensureUserIsStaff, customer);

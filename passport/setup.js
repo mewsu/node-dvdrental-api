@@ -19,10 +19,6 @@ let strategy = new LocalStrategy(
     console.log("login attempt: ", { email, password, role });
     try {
       const query = `SELECT * FROM ${role} WHERE email = $1 AND password = $2`;
-
-      // const query = `SELECT * FROM  ${db.escapeIdentifier(
-      //   role
-      // )} WHERE email = $1 AND password = $2`;
       const rows = await db.query(query, [email, password]);
       if (!rows.length) {
         console.log("no found user");
